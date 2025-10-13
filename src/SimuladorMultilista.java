@@ -9,7 +9,7 @@
  * @author Lenovo
  */
 public class SimuladorMultilista extends javax.swing.JFrame {
-
+    private java.util.Map<String, java.util.Set<String>> multilista = new java.util.HashMap<>();
     /** Creates new form SimuladorMultilista */
     public SimuladorMultilista() {
         initComponents();
@@ -50,6 +50,11 @@ public class SimuladorMultilista extends javax.swing.JFrame {
         jLabel4.setText("Búsqueda de categoría:");
 
         btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         btnBuscar.setText("Buscar");
 
@@ -147,6 +152,41 @@ public class SimuladorMultilista extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+        String categoria = txtCategoria.getText().trim();
+        String elemento = txtElemento.getText().trim();
+
+        // Validar entradas
+        if (categoria.isEmpty() || elemento.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Debe ingresar una categoría y un elemento.", 
+                    "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        categoria = categoria.toLowerCase();
+        elemento = elemento.toLowerCase();
+        multilista.putIfAbsent(categoria, new java.util.HashSet<>());
+        boolean agregado = multilista.get(categoria).add(elemento);
+        javax.swing.table.DefaultTableModel modelo = 
+                (javax.swing.table.DefaultTableModel) tablaMultilista.getModel();
+        modelo.setRowCount(0); 
+        for (String cat : multilista.keySet()) {
+            String elementos = String.join(", ", multilista.get(cat));
+            modelo.addRow(new Object[]{cat, elementos});
+        }
+
+        if (agregado) {
+            areaLog.append("✔ Elemento '" + elemento + "' agregado a la categoría '" + categoria + "'\n");
+        } else {
+            areaLog.append("⚠ El elemento '" + elemento + "' ya existía en la categoría '" + categoria + "'\n");
+        }
+
+        txtCategoria.setText("");
+        txtElemento.setText("");
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
