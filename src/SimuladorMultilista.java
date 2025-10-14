@@ -57,6 +57,11 @@ public class SimuladorMultilista extends javax.swing.JFrame {
         });
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setText("Limpiar");
 
@@ -187,6 +192,57 @@ public class SimuladorMultilista extends javax.swing.JFrame {
         txtCategoria.setText("");
         txtElemento.setText("");
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        String categoriaBuscada = txtBuscarCategoria.getText().trim().toLowerCase();
+
+        if (categoriaBuscada.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Ingrese una categoría para buscar.",
+                    "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        areaLog.append("🔎 Buscando categoría: " + categoriaBuscada + "\n");
+        
+        if (multilista.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "No hay categorías registradas.",
+                    "Aviso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        if (multilista.containsKey(categoriaBuscada)) {
+            java.util.Set<String> elementos = multilista.get(categoriaBuscada);
+            areaLog.append("✔ Categoría encontrada: " + categoriaBuscada + "\n");
+            areaLog.append("Elementos asociados:\n");
+
+            for (String e : elementos) {
+                areaLog.append("   • " + e + "\n");
+            }
+            areaLog.append("\n");
+
+            javax.swing.table.DefaultTableModel modelo =
+                    (javax.swing.table.DefaultTableModel) tablaMultilista.getModel();
+
+            for (int i = 0; i < modelo.getRowCount(); i++) {
+                String cat = modelo.getValueAt(i, 0).toString();
+                if (cat.equalsIgnoreCase(categoriaBuscada)) {
+                    tablaMultilista.setRowSelectionInterval(i, i);
+                    break;
+                }
+            }
+
+        } else {
+            areaLog.append("❌ La categoría '" + categoriaBuscada + "' no se encontró.\n\n");
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Categoría no encontrada.",
+                    "Resultado", javax.swing.JOptionPane.WARNING_MESSAGE);
+        }
+
+        txtBuscarCategoria.setText("");
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
