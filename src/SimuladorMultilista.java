@@ -64,6 +64,11 @@ public class SimuladorMultilista extends javax.swing.JFrame {
         });
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         tablaMultilista.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -243,6 +248,20 @@ public class SimuladorMultilista extends javax.swing.JFrame {
 
         txtBuscarCategoria.setText("");
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        // TODO add your handling code here:
+        txtCategoria.setText("");
+        txtElemento.setText("");
+        txtBuscarCategoria.setText("");
+        areaLog.setText("");
+
+        javax.swing.table.DefaultTableModel modelo = 
+            (javax.swing.table.DefaultTableModel) tablaMultilista.getModel();
+        modelo.setRowCount(0);
+        multilista.clear();
+        areaLog.append("✔ Interfaz limpiada. Multilista vacía y lista para nuevas entradas.\n");
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
